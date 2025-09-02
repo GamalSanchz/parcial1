@@ -1,46 +1,36 @@
-# este archivo maneja el registro de viajes
-#primero llamamos losmodulos necesarios
-from typing import List, Dict, Tuple
-from viaje import Viaje
-#luego definimos la clase RegistroViajes
 
-class RegistroViajes:
-    def __init__(self) -> None:
-        self._viajes: List[Viaje] = []
-        # lista interna de viajes
+# Registro simple de usuarios y viajes.
 
-    def agregar(self, v: Viaje) -> None:
-        """Agregar un viaje al registro."""
-        self._viajes.append(v)
+from usuario import Usuario
 
-    def listar_ordenado(self) -> List[Viaje]:
-        """Devolver los viajes ordenados por fecha y luego por ruta."""
-        #ordenar por (fecha, ruta.lower()) y devolver la lista ordenada.
-        return sorted(self._viajes, key=lambda x: (x.fecha, x.ruta.lower()))
+class Registro:
+    def __init__(self):
+        self.usuarios = []   # lista de Usuario
+        self.viajes = []     # lista de Viaje
 
-    def resumen_general(self) -> dict:
-        """Totales simples: cantidad, minutos y costo."""
-        # calcular sumas y redondear costo a 2 decimales.
-        total_costo = round(sum(v.costo for v in self._viajes), 2)
-        total_tiempo = sum(v.tiempo_min for v in self._viajes)
-        return {
-            "viajes": len(self._viajes),
-            "total_tiempo_min": total_tiempo,
-            "total_costo": total_costo,
-        }
-    
-    def resumen_por_semana(self) -> Dict[Tuple[int, int], dict]:
-        """Agrupar por semana ISO: clave (año, nro_semana) con totales."""
-        # usar v.fecha.isocalendar() → (year, week, weekday).
-        res: Dict[Tuple[int, int], dict] = {}
-        for v in self._viajes:
-            year, week, _ = v.fecha.isocalendar()
-            key = (year, week)
-            if key not in res:
-                res[key] = {"viajes": 0, "total_tiempo_min": 0, "total_costo": 0.0}
-            res[key]["viajes"] += 1
-            res[key]["total_tiempo_min"] += v.tiempo_min
-            res[key]["total_costo"] += v.costo
-        for k in res:
-            res[k]["total_costo"] = round(res[k]["total_costo"], 2)
-        return res
+    # ---- Usuarios ----
+    def agregar_usuario(self, nombre):
+        nombre = nombre.strip()
+        if not nombre:
+            return None
+        for u in self.usuarios:
+            if u.nombre.lower() == nombre.lower():
+                return u
+        nuevo = Usuario(nombre)
+        self.usuarios.append(nuevo)
+        return nuevo
+
+    def listar_usuarios(self):
+        return sorted(self.usuarios, key=lambda u: u.nombre.lower())
+
+    # ---- Viajes ----
+    def agregar_viaje(self, viaje):
+        self.viajes.append(viaje)
+
+    def listar_viajes(self):
+        # Orden por fecha (texto), luego usuario y código de ruta
+        return sorted(self.viajes, key=lambda v: (v.fecha, v.usuario.nombre.lower(), v.ruta.codigo))
+
+    def viajes_por_usuario(self, nombre):
+        k = nombre.strip().lower()
+        return [v for v in self.viajes if v.usuario.nombre.lower() == k]
