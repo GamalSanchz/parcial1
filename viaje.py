@@ -1,24 +1,15 @@
-# Módulo que define la clase Viaje
-from dataclasses import dataclass
-from datetime import date
-# Conjunto de tipos de viaje válidos
-TIPOS_VALIDOS = {"urbana", "rural", "otro"}
-# Clase que representa un viaje
-@dataclass
-class Viaje:
-    fecha: date
-    ruta: str
-    tipo: str          # "urbana" / "rural" / "otro"
-    tiempo_min: int    # duración en minutos
-    costo: float       # USD
-    notas: str = ""
+# viaje.py
+# Un viaje realizado por un usuario en una ruta, en una fecha (como texto simple).
 
-    def __post_init__(self):
-        # Normaliza y valida tipo
-        self.tipo = self.tipo.strip().lower()
-        if self.tipo not in TIPOS_VALIDOS:
-            raise ValueError(f"tipo inválido: {self.tipo}. Debe ser uno de {', '.join(TIPOS_VALIDOS)}")
-    # Representación legible del viaje
+class Viaje:
+    def __init__(self, fecha_texto, usuario, ruta, notas=""):
+        self.fecha = fecha_texto.strip()   # "YYYY-MM-DD" (texto, para mantenerlo básico)
+        self.usuario = usuario             # objeto Usuario
+        self.ruta = ruta                   # objeto Ruta
+        self.costo = ruta.tarifa           # costo = tarifa de la ruta
+        self.notas = notas.strip()
+
     def __str__(self):
-        return (f"Fecha: {self.fecha}, Ruta: {self.ruta}, Tipo: {self.tipo}, "
-                f"Tiempo: {self.tiempo_min} min, Costo: ${self.costo:.2f}, Notas: {self.notas}")
+        return (f"{self.fecha} | {self.usuario.nombre} | "
+                f"{self.ruta.origen} → {self.ruta.destino} ({self.ruta.codigo}) | "
+                f"${self.costo:.2f} | {self.notas}")

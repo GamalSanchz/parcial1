@@ -1,54 +1,92 @@
-#main es el archivo principal que maneja el menú y la interacción con el usuario
-#primero importamos las clases y funciones necesarias
+# Menú básico para: usuarios, registrar viajes, listar y consultar por usuario.
+
+from ruta import Ruta
 from viaje import Viaje
-from registro import RegistroViajes
-from user_input import pedir_fecha, pedir_int, pedir_float
-#luego definimos el menú principal
+from registro import Registro
+from user_input import elegir_usuario, elegir_ruta
+
+def obtener_rutas_fijas():
+    # Edita o agrega las rutas que quieras (incluye tus ejemplos)
+    return [
+        Ruta("328",  "Osicala",          "San Miguel",       1.50),
+        Ruta("328",  "San Miguel",       "Osicala",          1.50),
+        Ruta("333B", "San Buenaventura", "San Miguel",       0.65),
+        Ruta("333B", "San Miguel",       "San Buenaventura", 0.65),
+    ]
+# Mostrar las rutas disponibles
+def ver_rutas(rutas):
+    print("\nRutas y tarifas:")
+    for r in rutas:
+        print(" -", r.etiqueta())
+# Registrar un viaje nuevo
+def registrar_viaje(reg, rutas):
+    usuario = elegir_usuario(reg)
+    if not usuario:
+        print("Nombre vacío; no se creó usuario.")
+        return
+    fecha = input("Fecha (YYYY-MM-DD): ").strip()   # simple, como texto
+    ruta = elegir_ruta(rutas)
+    notas = input("Notas (opcional): ").strip()
+    v = Viaje(fecha, usuario, ruta, notas)
+    reg.agregar_viaje(v)
+    print("✓ Viaje registrado:", v)
+# Listar todos los viajes
+def listar_viajes(reg):
+    vs = reg.listar_viajes()
+    if not vs:
+        print("No hay viajes.")
+        return
+    print("\nFECHA       | USUARIO           | RUTA (COD)                 | COSTO | NOTAS")
+    print("-"*85)
+    for v in vs:
+        print(v)
+# Consultar viajes por usuario
+def consultar_por_usuario(reg):
+    nombre = input("Nombre del usuario: ").strip()
+    vs = reg.viajes_por_usuario(nombre)
+    if not vs:
+        print("Ese usuario no tiene viajes.")
+        return
+    print(f"\nViajes de {nombre}:")
+    print("FECHA       | ORIGEN → DESTINO (COD) | COSTO | NOTAS")
+    print("-"*65)
+    for v in sorted(vs, key=lambda x: x.fecha):
+        print(f"{v.fecha} | {v.ruta.origen} → {v.ruta.destino} ({v.ruta.codigo}) | ${v.costo:.2f} | {v.notas}")
+# Menú principal
 def menu():
-    reg = RegistroViajes()
-    #bucle principal del menú
+    reg = Registro()
+    rutas = obtener_rutas_fijas()
+# Bucle del menú
     while True:
         print("\n=== MENU ===")
-        print("1) Agregar viaje")
-        print("2) Listar viajes")
-        print("3) Resumen general")
-        print("4) Resumen por semana")
+        print("1) Agregar usuario")
+        print("2) Registrar viaje (usuario + ruta)")
+        print("3) Listar todos los viajes")
+        print("4) Consultar viajes por usuario")
+        print("5) Ver rutas y tarifas")
         print("0) Salir")
         op = input("> ").strip()
-        #procesamos la opción seleccionada, cada opción llama a una función o método correspondiente
-        #agregar viaje, listar viajes, mostrar resumen general o por semana
+
         if op == "1":
-            fecha = pedir_fecha("Fecha (YYYY-MM-DD): ")
-            km = pedir_float("Kilómetros recorridos: ")
-            litros = pedir_float("Litros consumidos: ")
-            precio = pedir_float("Precio por litro: ")
-            viaje = Viaje(fecha, km, litros, precio)
-            reg.agregar_viaje(viaje)
-            print("Viaje agregado.")
-            #mostrar detalles del viaje agregado
-            print(viaje)
-            #listar todos los viajes
+            nombre = input("Nombre del usuario: ").strip()
+            u = reg.agregar_usuario(nombre)
+            if u:
+                print(f"✓ Usuario: {u.nombre}")
+            else:
+                print("Nombre vacío; no se creó usuario.")
         elif op == "2":
-            print("\n--- Lista de Viajes ---")
-            for v in reg.viajes:
-                print(v)
-                #mostrar resumen general
+            registrar_viaje(reg, rutas)
         elif op == "3":
-            print("\n--- Resumen General ---")
-            print(reg.resumen_general())
-            #mostrar resumen por semana
+            listar_viajes(reg)
         elif op == "4":
-            semana = pedir_int("Número de semana (1-52): ")
-            print(f"\n--- Resumen Semana {semana} ---")
-            print(reg.resumen_por_semana(semana))
-            #salir del programa
+            consultar_por_usuario(reg)
+        elif op == "5":
+            ver_rutas(rutas)
         elif op == "0":
-            print("Saliendo... Hasta Luego")
+            print("¡Hasta luego!")
             break
         else:
-            print("Opción no válida. Intente de nuevo.")
+            print("Opción no válida.")
 
-#iniciamos el programa llamando al menú principal
 if __name__ == "__main__":
     menu()
-            
