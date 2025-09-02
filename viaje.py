@@ -1,14 +1,13 @@
 # viaje.py
-# Un viaje realizado por un usuario en una ruta, en una fecha (como texto simple).
-#creamos la clase viaje
+# Un viaje: fecha (texto), usuario (objeto), ruta (objeto), notas.
+
 class Viaje:
     def __init__(self, fecha_texto, usuario, ruta, notas=""):
-        self.fecha = fecha_texto.strip()# "YYYY-MM-DD" (texto, para mantenerlo básico)
-        self.usuario = usuario# objeto Usuario
-        self.ruta = ruta # objeto Ruta
-        self.costo = ruta.tarifa # costo = tarifa de la ruta
+        self.fecha = fecha_texto.strip()   # "YYYY-MM-DD" como texto
+        self.usuario = usuario             # objeto Usuario
+        self.ruta = ruta                   # objeto Ruta
+        self.costo = float(ruta.tarifa)    # costo sale de la ruta
         self.notas = notas.strip()
-    
 
     def __str__(self):
         return (f"{self.fecha} | {self.usuario.nombre} | "
