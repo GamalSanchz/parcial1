@@ -1,31 +1,33 @@
-# Módulo para pedir entradas de usuario con validación.
+# creamos funciones para manejar la entrada del usuario
+def pedir_entero_en_rango(msg, minimo, maximo):
+    while True:
+        s = input(msg).strip()
+        if s.isdigit():
+            n = int(s)
+            if minimo <= n <= maximo:
+                return n
+        print("Opción inválida.")
+#funcion para elegir un usuario
+def elegir_usuario(reg):
+    usuarios = reg.listar_usuarios()
+    if not usuarios:
+        print("No hay usuarios. Crea uno nuevo.")
+        nombre = input("Nombre del usuario: ").strip()
+        return reg.agregar_usuario(nombre)
 
-#importamos date y time para manejar fechas
-from datetime import datetime, date
-#solicitamos una fecha en formato YYYY-MM-DD y devolver date
-def pedir_fecha(msg: str = "Fecha (YYYY-MM-DD): ") -> date:
-    """Pedir una fecha en formato YYYY-MM-DD y devolver date."""
-    while True:
-        s = input(msg).strip()
-        try:
-            return datetime.strptime(s, "%Y-%m-%d").date()
-        except ValueError:
-            print("Formato inválido.Necesitas poner año, mes, dia ejemplo: 2025-09-01")
-#creamos la funcion pedir_int
-def pedir_int(msg: str) -> int:
-    """Pedir un entero y reintentar si no es válido."""
-    while True:
-        s = input(msg).strip()
-        try:
-            return int(s)
-        except ValueError:
-            print("Debe ser un número entero.")
-#creamos la funcion pedir_float
-def pedir_float(msg: str) -> float:
-    """Pedir un número decimal. Aceptar coma o punto."""
-    while True:
-        s = input(msg).strip().replace(",", ".")
-        try:
-            return float(s)
-        except ValueError:
-            print("Debe ser un número (usa punto o coma para decimales).")
+    print("\nUsuarios:")
+    for i, u in enumerate(usuarios, start=1):
+        print(f"  {i}) {u.etiqueta()}")
+    print(f"  {len(usuarios)+1}) [Nuevo usuario]")
+    idx = pedir_entero_en_rango("> Elige: ", 1, len(usuarios)+1)
+    if idx == len(usuarios)+1:
+        nombre = input("Nombre del nuevo usuario: ").strip()
+        return reg.agregar_usuario(nombre)
+    return usuarios[idx-1]
+#funcion para elegir una ruta
+def elegir_ruta(rutas):
+    print("\nRutas disponibles:")
+    for i, r in enumerate(rutas, start=1):
+        print(f"  {i}) {r.etiqueta()}")
+    idx = pedir_entero_en_rango(f"> Elige ruta (1..{len(rutas)}): ", 1, len(rutas))
+    return rutas[idx-1]
