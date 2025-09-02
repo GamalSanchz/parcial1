@@ -1,4 +1,3 @@
-# viaje.py
 # Un viaje: fecha (texto), usuario (objeto), ruta (objeto), notas.
 
 class Viaje:
