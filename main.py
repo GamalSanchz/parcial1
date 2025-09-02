@@ -1,5 +1,5 @@
 # Menú básico para: usuarios, registrar viajes, listar y consultar por usuario.
-
+#importamos  los modulos necesarios
 from ruta import Ruta
 from viaje import Viaje
 from registro import Registro
