@@ -1,9 +1,13 @@
+#  este archivo maneja el registro de viajes
+#primero llamamos los modulos
 from typing import List, Dict, Tuple
 from viaje import Viaje
+#luego definimos la clase RegistroViajes
 
 class RegistroViajes:
     def __init__(self) -> None:
         self._viajes: List[Viaje] = []
+        # lista interna de viajes
 
     def agregar(self, v: Viaje) -> None:
         """Agregar un viaje al registro."""
