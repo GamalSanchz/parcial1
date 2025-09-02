@@ -27,7 +27,7 @@ class RegistroViajes:
     
     def resumen_por_semana(self) -> Dict[Tuple[int, int], dict]:
         """Agrupar por semana ISO: clave (año, nro_semana) con totales."""
-        # TODO(Copilot): usar v.fecha.isocalendar() → (year, week, weekday).
+        # usar v.fecha.isocalendar() → (year, week, weekday).
         res: Dict[Tuple[int, int], dict] = {}
         for v in self._viajes:
             year, week, _ = v.fecha.isocalendar()
