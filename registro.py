@@ -1,5 +1,5 @@
 # este archivo maneja el registro de viajes
-#primero llamamos los modulos
+#primero llamamos losmodulos necesarios
 from typing import List, Dict, Tuple
 from viaje import Viaje
 #luego definimos la clase RegistroViajes
