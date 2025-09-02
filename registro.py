@@ -1,4 +1,4 @@
-#  este archivo maneja el registro de viajes
+# este archivo maneja el registro de viajes
 #primero llamamos los modulos
 from typing import List, Dict, Tuple
 from viaje import Viaje
