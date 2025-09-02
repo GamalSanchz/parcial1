@@ -1,9 +1,10 @@
-# main.py
+# Programa principal para registrar y consultar viajes de usuarios.
+#importamos las clases necesarias
 from ruta import Ruta
 from viaje import Viaje
 from registro import Registro
 from user_input import elegir_usuario, elegir_ruta
-
+#funcion para obtener rutas fijas
 def obtener_rutas_fijas():
     return [
         Ruta("328",  "Osicala",          "San Miguel",       1.50),
@@ -11,12 +12,12 @@ def obtener_rutas_fijas():
         Ruta("333B", "San Buenaventura", "San Miguel",       0.65),
         Ruta("333B", "San Miguel",       "San Buenaventura", 0.65),
     ]
-
+#funcion para ver las rutas
 def ver_rutas(rutas):
     print("\nRutas y tarifas:")
     for r in rutas:
         print(" -", r.etiqueta())
-
+#funcion para registrar un viaje
 def registrar_viaje(reg, rutas):
     usuario = elegir_usuario(reg)
     if not usuario:
@@ -25,10 +26,10 @@ def registrar_viaje(reg, rutas):
     fecha = input("Fecha (YYYY-MM-DD): ").strip()
     ruta = elegir_ruta(rutas)
     notas = input("Notas (opcional): ").strip()
-    v = Viaje(fecha, usuario, ruta, notas)     # <- ¡esta es la firma correcta!
+    v = Viaje(fecha, usuario, ruta, notas)
     reg.agregar_viaje(v)
     print("✓ Viaje registrado:", v)
-
+#funcion para listar los viajes
 def listar_viajes(reg):
     vs = reg.listar_viajes()
     if not vs:
@@ -38,7 +39,7 @@ def listar_viajes(reg):
     print("-"*85)
     for v in vs:
         print(v)
-
+#funcion para consultar viajes por usuario
 def consultar_por_usuario(reg):
     nombre = input("Nombre del usuario: ").strip()
     vs = reg.viajes_por_usuario(nombre)
@@ -50,7 +51,7 @@ def consultar_por_usuario(reg):
     print("-"*65)
     for v in sorted(vs, key=lambda x: x.fecha):
         print(f"{v.fecha} | {v.ruta.origen} → {v.ruta.destino} ({v.ruta.codigo}) | ${v.costo:.2f} | {v.notas}")
-
+#funcion para mostrar el menu
 def menu():
     reg = Registro()
     rutas = obtener_rutas_fijas()
