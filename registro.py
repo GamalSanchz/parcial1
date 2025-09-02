@@ -1,15 +1,12 @@
-
-# Registro simple de usuarios y viajes.
-
 from usuario import Usuario
 
 class Registro:
     def __init__(self):
-        self.usuarios = []   # lista de Usuario
-        self.viajes = []     # lista de Viaje
+        self.usuarios = []   # lista[Usuario]
+        self.viajes = []     # lista[Viaje]
 
     # ---- Usuarios ----
-    def agregar_usuario(self, nombre):
+    def agregar_usuario(self, nombre: str):
         nombre = nombre.strip()
         if not nombre:
             return None
@@ -31,6 +28,6 @@ class Registro:
         # Orden por fecha (texto), luego usuario y código de ruta
         return sorted(self.viajes, key=lambda v: (v.fecha, v.usuario.nombre.lower(), v.ruta.codigo))
 
-    def viajes_por_usuario(self, nombre):
+    def viajes_por_usuario(self, nombre: str):
         k = nombre.strip().lower()
         return [v for v in self.viajes if v.usuario.nombre.lower() == k]
