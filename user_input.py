@@ -1,4 +1,5 @@
 # Módulo para pedir entradas de usuario con validación.
+
 #importamos date y time para manejar fechas
 from datetime import datetime, date
 #solicitamos una fecha en formato YYYY-MM-DD y devolver date
